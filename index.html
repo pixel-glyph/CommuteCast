@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Directions service</title>
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+      #panel {
+        position: absolute;
+        top: 5px;
+        left: 50%;
+        margin-left: -180px;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./routeCast.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+  <body>
+    <div id="panel">
+      <b>Start: </b>
+      <input id="start" type="textbox" value="">
+      <b>End: </b>
+      <input id="end" type="textbox" value="">
+      <input type="button" value="Get Route" onclick="calcRoute();">
+    </div>
+    <div id="map-canvas"></div>
+  </body>
+</html>
