@@ -7,6 +7,15 @@ var map;
 var origin1;
 var destinationA;
 
+var routeDist;
+var routeArray;
+var routeLength;
+
+var startLat;
+var startLng;
+var endLat;
+var endLng;
+
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
   var USA = new google.maps.LatLng(38.2192743, -96.2644229);
@@ -19,7 +28,9 @@ function initialize() {
 }
 
 //-------------------- GET DISTANCE --------------------
-function calculateDistances() {
+
+// invokes distacne matrix service to get distance of route in miles
+function calculateDistance() {
   var service = new google.maps.DistanceMatrixService();
   service.getDistanceMatrix(
     {
@@ -32,6 +43,7 @@ function calculateDistances() {
     }, callback);
 }
 
+// callback from distance matrix service
 function callback(response, status) {
   if (status != google.maps.DistanceMatrixStatus.OK) {
     alert('Error was: ' + status);
@@ -42,17 +54,15 @@ function callback(response, status) {
     for (var i = 0; i < origins.length; i++) {
       var results = response.rows[i].elements;
       for (var j = 0; j < results.length; j++) {
-        console.log(results[j].distance.text)
+        routeDist = results[j].distance.text
       }
     }
+    weatherReads();
   }
 }
 
 //-------------------- GET ROUTE --------------------
 
-//get end lat and lng
-//place all 4 coords in origin, destination vars
-//call distance function 
 function calcRoute() {
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
@@ -61,22 +71,24 @@ function calcRoute() {
       destination:end,
       travelMode: google.maps.TravelMode.DRIVING
   };
+  // grab start and end lat and lng AND the route's array length, place them in global vars
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
       // array of latlngs on a given routet
-      var routeLength = response.routes[0]["overview_path"].length;
-      var startLat = response.routes[0]["overview_path"][0].A;
-      var startLng = response.routes[0]["overview_path"][0].F;
+      routeArray = response.routes[0]["overview_path"];
+      routeLength = routeArray.length;
 
-      var pathArrayLength = response.routes[0]["overview_path"].length-1;
-      var endLat = response.routes[0]["overview_path"][pathArrayLength].A;
-      var endLng = response.routes[0]["overview_path"][pathArrayLength].F;
-      
+      startLat = routeArray[0].A;
+      startLng = routeArray[0].F;
+      var pathArrayLength = routeArray.length-1;
+      endLat = routeArray[pathArrayLength].A;
+      endLng = routeArray[pathArrayLength].F;
+
       origin1 = new google.maps.LatLng(startLat, startLng);
       destinationA = new google.maps.LatLng(endLat, endLng);
 
-      getWeather(startLat, startLng, routeLength);
+      calculateDistance();
     }
   });
 }
@@ -92,30 +104,85 @@ function printError(error) {
 }
 
 
-function getWeather(lat, lng, routeLength) {
-  // forecast.io API
-  var url = "https://api.forecast.io/forecast/168b6b5a68104d52147285a01177bf63/" + lat + "," + lng + "?callback=?";
-  // Exclude unneeded data blocks
-  var opts = { exclude: "minutely,flags" }
+function getWeather(coords) {
 
-  $.getJSON(url, opts).done(function(data) {
-    try {
-      if (routeLength >= 50)
-      var temperature = Math.round(data.currently.temperature);
-      var condition = data.currently.summary;
+  for (i=0; i < coords.length; i++) {
+    for (var key in coords[i]) {
+      var lat = coords[i][key]["lat"];
+      var lng = coords[i][key]["lng"];
 
-      printWeather(temperature, condition);
+      // forecast.io API
+      var url = "https://api.forecast.io/forecast/168b6b5a68104d52147285a01177bf63/" + lat + "," + lng + "?callback=?";
+      // Exclude unneeded data blocks
+      var opts = { exclude: "minutely,flags" };
 
-    } catch(error) {
-      printError(error);
-    }
-      //printError({message: "There was an error getting the forecast for " + latitude + " " + longitude + ". (" + http.STATUS_CODES[res.statusCode] + ")"});
-  }).fail(function(e) {
-    console.log(e);
-  });
-  // call to print distance in miles to the console
-  calculateDistances();
-  console.log(routeLength);
+      $.getJSON(url, opts).done(function(data) {
+        try {
+
+          var temperature = Math.round(data.currently.temperature);
+          var condition = data.currently.summary;
+
+          printWeather(temperature, condition);
+
+        } catch(error) {
+          printError(error);
+        }
+          //printError({message: "There was an error getting the forecast for " + latitude + " " + longitude + ". (" + http.STATUS_CODES[res.statusCode] + ")"});
+      }).fail(function(e) {
+        console.log(e);
+      });
+    } 
+  }
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
+
+
+function weatherReads() {
+  var readCoords = [];
+  if (routeDist > 50) {
+    
+  } 
+
+  readCoords.unshift( {
+    "start": {
+      "lat": startLat,
+      "lng": startLng
+    }
+  });
+  readCoords.push( {
+    "end": {
+      "lat": endLat,
+      "lng": endLng
+    }
+  });
+  
+
+
+  getWeather(readCoords);
+}
+
+// print out weather at start, destination, and measured intervals between
+  // check distance in miles 
+    // if under 50 miles, only take start and dest weather reads
+    // if over 50 miles, take a number of weather reads equal to how many times the distance is divisible by 50
+      // to determine where along the route to read weather, divide the route's array length by the above number + 1
+      // take that quotient and grab the coords at each multiple of that number along the route
+        // ex: route = 130 miles, array length = 221 
+        // 130 / 50 = 2 weather reads
+        // 221 / 3 = 77 (rounded)
+        // --> first between read is at index 77 in route array
+        // --> second between read at index 154 in route array
+        // --> reads will also be taken for 1 and 220
+
+// create dropdown for user to select forecast date
+  // use selected date to look up daily weather
+
+
+// program flow:
+  // read in start and end from user input
+  // calculate the route (polyline)
+  // calculate distance (miles)
+  // get weather reads
+    // start and end weather reads
+    // middle weather reads
