@@ -53,9 +53,9 @@ function callback(response, status) {
 
     for (var i = 0; i < origins.length; i++) {
       var results = response.rows[i].elements;
-      for (var j = 0; j < results.length; j++) {
-        routeDist = results[j].distance.text
-      }
+      for (var j = 0; j < results.length; j++)
+        // value returned in meters is divided by the number of meters in a mile
+        routeDist = Math.round(results[j].distance.value/1609.34);
     }
     weatherReads();
   }
@@ -141,7 +141,16 @@ google.maps.event.addDomListener(window, 'load', initialize);
 function weatherReads() {
   var readCoords = [];
   if (routeDist > 50) {
-    
+    var numReads = Math.floor(routeDist/50);
+    var interval = Math.floor(routeLength/(numReads + 1));
+    for (i=interval; i < routeLength; i+=interval) {
+      readCoords.push( {
+        i: {
+          "lat": routeArray[i].A,
+          "lng": routeArray[i].F
+        }
+      });
+    }
   } 
 
   readCoords.unshift( {
@@ -156,28 +165,9 @@ function weatherReads() {
       "lng": endLng
     }
   });
-  
-
 
   getWeather(readCoords);
 }
-
-// print out weather at start, destination, and measured intervals between
-  // check distance in miles 
-    // if under 50 miles, only take start and dest weather reads
-    // if over 50 miles, take a number of weather reads equal to how many times the distance is divisible by 50
-      // to determine where along the route to read weather, divide the route's array length by the above number + 1
-      // take that quotient and grab the coords at each multiple of that number along the route
-        // ex: route = 130 miles, array length = 221 
-        // 130 / 50 = 2 weather reads
-        // 221 / 3 = 77 (rounded)
-        // --> first between read is at index 77 in route array
-        // --> second between read at index 154 in route array
-        // --> reads will also be taken for 1 and 220
-
-// create dropdown for user to select forecast date
-  // use selected date to look up daily weather
-
 
 // program flow:
   // read in start and end from user input
