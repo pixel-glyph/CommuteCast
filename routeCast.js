@@ -16,6 +16,9 @@ var startLng;
 var endLat;
 var endLng;
 
+var weather;
+var d = new Date();
+
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
   var USA = new google.maps.LatLng(38.2192743, -96.2644229);
@@ -93,8 +96,13 @@ function calcRoute() {
   });
 }
 
-function printWeather(temp, cond) {
-  var message = "Current Weather: " + temp + " and " + cond;
+function printWeather(cond, temp, temp2) {
+  var message;
+  if (temp2 === undefined) {
+    message = "Current Weather: " + temp + " and " + cond;
+  } else {
+    message = "High: " + temp + ", Low: " + temp2 + ", " + cond;
+  }
   console.log(message);
 }
 
@@ -118,11 +126,22 @@ function getWeather(coords) {
 
       $.getJSON(url, opts).done(function(data) {
         try {
-
-          var temperature = Math.round(data.currently.temperature);
-          var condition = data.currently.summary;
-
-          printWeather(temperature, condition);
+          var temp;
+          var temp2;
+          var condition;
+          var day = $("#commuteDay").val();
+          
+          if(day === "today") {
+            weather = data;
+            temp = Math.round(data.currently.temperature);
+            condition = data.currently.summary;
+          } else {
+            temp = Math.round(data.daily.data[day-1].temperatureMax);
+            temp2 = Math.round(data.daily.data[day-1].temperatureMin);
+            condition = data.daily.data[day-1].summary;
+          }
+          
+          printWeather(condition, temp, temp2);
 
         } catch(error) {
           printError(error);
@@ -131,7 +150,7 @@ function getWeather(coords) {
       }).fail(function(e) {
         console.log(e);
       });
-    } 
+    }
   }
 }
 
@@ -151,7 +170,7 @@ function weatherReads() {
         }
       });
     }
-  } 
+  }
 
   readCoords.unshift( {
     "start": {
@@ -168,6 +187,12 @@ function weatherReads() {
 
   getWeather(readCoords);
 }
+
+for (i=1; i <= $("#commuteDay option").length; i++) {
+  d.setDate(d.getDate() + 1);
+  $("#commuteDay option:nth-child("+ (i+1) +")").html((d.getMonth() + 1) + "/" + (d.getDate()));
+}
+
 
 // program flow:
   // read in start and end from user input
