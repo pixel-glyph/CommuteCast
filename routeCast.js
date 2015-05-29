@@ -144,6 +144,7 @@ function getWeather() {
           temp = Math.round(data.currently.temperature);
           condition = data.currently.summary;
           icn =  data.currently.icon;
+          // html for current info windows
           var contentString =
           '<div id="content">'+
             '<div id="siteNotice">'+
@@ -154,10 +155,11 @@ function getWeather() {
             '</div>'+
           '</div>';
         } else {
-          temp = Math.round(data.daily.data[day-1].temperatureMax);
-          temp2 = Math.round(data.daily.data[day-1].temperatureMin);
-          condition = data.daily.data[day-1].summary;
-          icn = data.daily.icon;
+          temp = Math.round(data.daily.data[day].temperatureMax);
+          temp2 = Math.round(data.daily.data[day].temperatureMin);
+          condition = data.daily.data[day].summary;
+          icn = data.daily.data[day].icon;
+          // html for future info windows
           var contentString =
           '<div id="content">'+
             '<div id="siteNotice">'+
@@ -169,6 +171,7 @@ function getWeather() {
           '</div>';
         }
 
+        // weather icon options
         var weatherIcon = {
           path: iconPaths[icn],
           scale: 0.02,
@@ -177,6 +180,7 @@ function getWeather() {
           fillOpacity: 1.0
         };
 
+        // add weather icon to map as a symbol
         var pos = new google.maps.LatLng(data.latitude, data.longitude);
         var marker = new google.maps.Marker({
           position: pos,
@@ -184,12 +188,12 @@ function getWeather() {
           map: map
         });
         
-        
-    
+        // create info window for weather icon using above html
         var infowindow = new google.maps.InfoWindow({
             content: contentString
         });
         
+        // open and close info window on mouse over and mouse out events
         google.maps.event.addListener(marker, 'mouseover', function() {
           infowindow.open(map,marker);
         });
@@ -207,9 +211,10 @@ function getWeather() {
       console.log(e);
     });
   }
+  // jQuery to disable used input fields and show New Route button
   $("input, select").attr("disabled", true);
   $("input, select").css("opacity",0.6);
-  readCoords = [];
+  $("#newRoute").show();
 }
 
 
@@ -251,10 +256,20 @@ for (i=1; i <= $("#commuteDay option").length; i++) {
   $("#commuteDay option:nth-child("+ (i+1) +")").html((d.getMonth() + 1) + "/" + (d.getDate()));
 }
 
+$("#newRoute").on('click', function(){
+  readCoords = [];
+  $("input, select").attr("disabled", false);
+  $("input, select").css("opacity", 1);
+  $("#start, #end").val("");
+  $(this).hide();
+  initialize();
+});
 
-// disable start/end input fields and 'get route' button after getting first route
 // add a 'get new route' button to page. Create an event listner on that button to clear
 // weather icons from map and other data and re-enable input fields and 'get route' button
+
+
+// add day of the week name next to each date in dropdown, ex: 6/2-Tuesday
 
 
 // in the dropdown have "today" be the heading for the first set of options, which

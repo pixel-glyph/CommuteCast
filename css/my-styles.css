@@ -8,10 +8,19 @@
 #panel {
   position: absolute;
   top: 5px;
-  left: 50%;
+  left: 40%;
   margin-left: -180px;
   z-index: 5;
   background-color: #fff;
   padding: 5px;
   border: 1px solid #999;
+}
+
+#newRoute {
+  height: 35px;
+  position: absolute;
+  top: 55px;
+  right: 46%;
+  z-index: 5;
+  display: none;
 }
