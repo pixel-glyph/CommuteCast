@@ -115,16 +115,6 @@ function calcRoute() {
   });
 }
 
-function printWeather(cond, temp, temp2) {
-  var message;
-  if (temp2 === undefined) {
-    message = "Current Weather: " + temp + " and " + cond;
-  } else {
-    message = "High: " + temp + ", Low: " + temp2 + ", " + cond;
-  }
-  console.log(message);
-}
-
 //Print out error messages
 function printError(error) {
   console.error(error.message);
@@ -154,11 +144,29 @@ function getWeather() {
           temp = Math.round(data.currently.temperature);
           condition = data.currently.summary;
           icn =  data.currently.icon;
+          var contentString =
+          '<div id="content">'+
+            '<div id="siteNotice">'+
+            '</div>'+
+            '<div id="bodyContent">'+
+              '<p>'+ temp +'&#8457;</p>'+
+              '<p><strong>'+ condition +'</strong></p>'+
+            '</div>'+
+          '</div>';
         } else {
           temp = Math.round(data.daily.data[day-1].temperatureMax);
           temp2 = Math.round(data.daily.data[day-1].temperatureMin);
           condition = data.daily.data[day-1].summary;
           icn = data.daily.icon;
+          var contentString =
+          '<div id="content">'+
+            '<div id="siteNotice">'+
+            '</div>'+
+            '<div id="bodyContent">'+
+              '<p>High: '+ temp +'&#8457; / Low: '+ temp2 +'&#8457;</p>'+
+              '<p><strong>'+ condition +'</strong></p>'+
+            '</div>'+
+          '</div>';
         }
 
         var weatherIcon = {
@@ -175,9 +183,21 @@ function getWeather() {
           icon: weatherIcon,
           map: map
         });
-
-        printWeather(condition, temp, temp2);
-
+        
+        
+    
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+        
+        google.maps.event.addListener(marker, 'mouseover', function() {
+          infowindow.open(map,marker);
+        });
+        
+        google.maps.event.addListener(marker, 'mouseout', function(){
+          infowindow.close(map,marker);
+        });
+  
       } catch(error) {
         printError(error);
       }
@@ -187,6 +207,9 @@ function getWeather() {
       console.log(e);
     });
   }
+  $("input, select").attr("disabled", true);
+  $("input, select").css("opacity",0.6);
+  readCoords = [];
 }
 
 
@@ -229,18 +252,14 @@ for (i=1; i <= $("#commuteDay option").length; i++) {
 }
 
 
+// disable start/end input fields and 'get route' button after getting first route
+// add a 'get new route' button to page. Create an event listner on that button to clear
+// weather icons from map and other data and re-enable input fields and 'get route' button
 
 
-// gather needed data from getWeather(), store in object, and pass it to print/draw functions
-// instead of calling the function with each read
-
-
-// in the dropdown have "today" be the heading for the first set of options, which 
-// will be times for the current day (morning, afternoon, evening). Place a divider 
+// in the dropdown have "today" be the heading for the first set of options, which
+// will be times for the current day (morning, afternoon, evening). Place a divider
 // under these options
-
-
-// display weather summary text in text box on weather icon hover or click
 
 
 // program flow:
