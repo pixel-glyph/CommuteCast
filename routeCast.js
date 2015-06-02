@@ -18,6 +18,7 @@ var endLng;
 
 var weather;
 var d = new Date();
+var d_names = ["Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 var readCoords = [];
 
@@ -191,9 +192,13 @@ function getWeather() {
         var infowindow = new google.maps.InfoWindow({
             content: contentString
         });
-        
+
         // open and close info window on mouse over and mouse out events
-        google.maps.event.addListener(marker, 'mouseover', function() {
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.open(map,marker);
+        });
+
+        google.maps.event.addListener(marker, 'mouseover', function(){
           infowindow.open(map,marker);
         });
         
@@ -252,7 +257,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
 // populates dropdown with proper dates
 for (i=1; i <= $("#commute-day option").length; i++) {
   d.setDate(d.getDate() + 1);
-  $("#commute-day option:nth-child("+ (i+1) +")").html((d.getMonth() + 1) + "/" + (d.getDate()));
+  $("#commute-day option:nth-child("+ (i+1) +")").html((d.getMonth() + 1) + "/" + (d.getDate() + " - " + d_names[d.getDay()]));
 }
 
 $(document).on('click', '#new-route', function(){
@@ -265,10 +270,8 @@ $(document).on('click', '#new-route', function(){
 });
 
 
+
 // add a bootstrap tooltip pointing to search bar on first search
-
-
-// add day of the week name next to each date in dropdown, ex: 6/2-Tuesday
 
 
 // in the dropdown have "today" be the heading for the first set of options, which
