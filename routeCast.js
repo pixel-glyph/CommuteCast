@@ -255,12 +255,12 @@ for (i=1; i <= $("#commute-day option").length; i++) {
   $("#commute-day option:nth-child("+ (i+1) +")").html((d.getMonth() + 1) + "/" + (d.getDate()));
 }
 
-$("#new-route").on('click', function(){
+$(document).on('click', '#new-route', function(){
   readCoords = [];
   $("#start, #end, #commute-day, #get-route").attr("disabled", false);
   $("#start, #end, #commute-day, #get-route").css("opacity", 1);
   $("#start, #end").val("");
-  $(this).hide();
+  $("#new-route").replaceWith('<button type="button" id="get-route" class="btn btn-primary" onclick="calcRoute();">Get Route</button>');
   initialize();
 });
 
