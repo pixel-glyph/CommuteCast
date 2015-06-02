@@ -121,12 +121,11 @@ function printError(error) {
 }
 
 function getWeather() {
-
   var temp;
   var temp2;
   var condition;
   var icn;
-  var day = $("#commuteDay").val();
+  var day = $("#commute-day").val();
 
   for (i=0; i < readCoords.length; i++) {
 
@@ -212,9 +211,9 @@ function getWeather() {
     });
   }
   // jQuery to disable used input fields and show New Route button
-  $("input, select").attr("disabled", true);
-  $("input, select").css("opacity",0.6);
-  $("#newRoute").show();
+  $("#start, #end, #commute-day, #get-route").attr("disabled", true);
+  $("#start, #end, #commute-day, #get-route").css("opacity",0.6);
+  $("#get-route").replaceWith('<button id="new-route" class="btn btn-success btn-lg" type="button">New Route</button>');
 }
 
 
@@ -251,22 +250,26 @@ function weatherReads() {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 // populates dropdown with proper dates
-for (i=1; i <= $("#commuteDay option").length; i++) {
+for (i=1; i <= $("#commute-day option").length; i++) {
   d.setDate(d.getDate() + 1);
-  $("#commuteDay option:nth-child("+ (i+1) +")").html((d.getMonth() + 1) + "/" + (d.getDate()));
+  $("#commute-day option:nth-child("+ (i+1) +")").html((d.getMonth() + 1) + "/" + (d.getDate()));
 }
 
-$("#newRoute").on('click', function(){
+$("#new-route").on('click', function(){
   readCoords = [];
-  $("input, select").attr("disabled", false);
-  $("input, select").css("opacity", 1);
+  $("#start, #end, #commute-day, #get-route").attr("disabled", false);
+  $("#start, #end, #commute-day, #get-route").css("opacity", 1);
   $("#start, #end").val("");
   $(this).hide();
   initialize();
 });
 
-// add a 'get new route' button to page. Create an event listner on that button to clear
-// weather icons from map and other data and re-enable input fields and 'get route' button
+
+// add a bootstrap tooltip pointing to search bar on first search
+
+
+// on mobile view logo will be a thin band at the top, put seach fields on map,
+// hide them when route is drawn, and small circular 'new route' button pops up
 
 
 // add day of the week name next to each date in dropdown, ex: 6/2-Tuesday

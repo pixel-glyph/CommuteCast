@@ -1,37 +1,57 @@
 <!DOCTYPE html>
 <html>
   <head>
-
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
     <link href="css/my-styles.css" rel="stylesheet" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700' rel='stylesheet' type='text/css'>
     <title>CommuteCast</title>
-
   </head>
+
   <body>
+    
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand main-logo" href="#">CommuteCast</a>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
-    <div id="panel">
-      <b>Start: </b>
-      <input id="start" type="textbox" value="Rochester, NY">
-      <b>End: </b>
-      <input id="end" type="textbox" value="Syracuse, NY">
-      <input type="button" value="Get Route" onclick="calcRoute();">
-      <select id="commuteDay" name="day">
-        <option value="today">Today</option>
-        <option value="1"></option>
-        <option value="2"></option>
-        <option value="3"></option>
-        <option value="4"></option>
-        <option value="5"></option>
-        <option value="6"></option>
-        <option value="7"></option>
-      </select>
-    </div>
-    <button id="newRoute" type="button">New Route</button>
+            <form class="navbar-form navbar-right form-inline" role="search">
+              <div class="form-group">
+                <select id="commute-day" class="dropdown dropdown-toggle form-control" data-toggle="dropdown" aria-expanded="false" name="day">
+                  <option value="today">Today</option>
+                  <option value="1"></option>
+                  <option value="2"></option>
+                  <option value="3"></option>
+                  <option value="4"></option>
+                  <option value="5"></option>
+                  <option value="6"></option>
+                  <option value="7"></option>
+                </select>
+                <input type="text" id="start" class="form-control" placeholder="Start">
+                <input type="text" id="end" class="form-control" placeholder="Destination">
+              </div>
+              <button type="button" id="get-route" class="btn btn-primary" onclick="calcRoute();">Get Route</button>
+            </form>
+
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    
+    <!-- <button id="new-route" class="btn btn-success" type="button">New Route</button> -->
     <div id="map-canvas"></div>
-
   </body>
 
   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
