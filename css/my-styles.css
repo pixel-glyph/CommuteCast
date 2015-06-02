@@ -6,37 +6,96 @@
   background-color: rgb(54, 57, 87); /* (85, 132, 178) */
 }
 
+.navbar {
+  margin-bottom: -62px;
+}
+
 .navbar-inverse {
+  z-index: 10;
   -moz-box-shadow: 0px 1px 8px #000;
   -webkit-box-shadow: 0px 1px 8px #000;
   box-shadow: 0px 1px 8px #000;
 }
 
 .main-logo {
-  font-size: 4em;
-  margin: 20px 0;
+  font-size: 2em;
+  margin: 10px 0 0;
   font-family: 'Montserrat', Courier, monospace;
 }
 
 .navbar-toggle {
-  margin-top: 28px;
+  margin-top: 13px;
+}
+
+#commute-day, #start, #end {
+  margin: 4px 0;
+
 }
 
 .navbar-form {
   margin-top: 35px;
 }
 
-#get-route {
-  margin-left: 20px;
-}
-
 #map-canvas {
-  height: 80%;
-  width: 97%;
-  max-width: 1350px;
-  margin: 50px auto 20px;
+  height: 100%;
+  width: 100%;
+  margin: 0;
 }
 
-#new-route {
-  margin-left: 20px;
+
+@media screen and (min-width: 768px) {
+
+  .main-logo {
+    margin: 20px 0;
+    font-size: 3em;
+  }
+
+  .navbar-toggle {
+    margin-top: 28px;
+  }
+
+  .navbar {
+    margin-bottom: 20px;
+  }
+
+  .navbar-form {
+    padding-left: 0;
+  }
+
+  .navbar-collapse {
+    padding-right: 0;
+  }
+
+  #commute-day, #start, #end {
+    margin: 0;
+  }
+
+  #start, #end {
+    width: 125px;
+  }
+
+  #get-route, #get-route {
+    margin-left: 20px;
+  }
+
+  #map-canvas {
+    height: 80%;
+    width: 97%;
+    max-width: 1450px;
+    margin: 50px auto 20px;
+  }
+
+}
+
+
+@media screen and (min-width: 1100px) {
+
+  .main-logo {
+    font-size: 3.5em;
+  }
+
+  #start, #end {
+    width: auto;
+  }
+
 }

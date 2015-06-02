@@ -268,10 +268,6 @@ $(document).on('click', '#new-route', function(){
 // add a bootstrap tooltip pointing to search bar on first search
 
 
-// on mobile view logo will be a thin band at the top, put seach fields on map,
-// hide them when route is drawn, and small circular 'new route' button pops up
-
-
 // add day of the week name next to each date in dropdown, ex: 6/2-Tuesday
 
 
