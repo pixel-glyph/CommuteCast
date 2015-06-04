@@ -104,6 +104,7 @@ function calcRoute() {
 
       startLat = routeArray[0].A;
       startLng = routeArray[0].F;
+
       var pathArrayLength = routeArray.length-1;
       endLat = routeArray[pathArrayLength].A;
       endLng = routeArray[pathArrayLength].F;
@@ -193,7 +194,7 @@ function getWeather() {
             content: contentString
         });
 
-        // open and close info window on mouse over and mouse out events
+        // 3 event listners added to each info window
         google.maps.event.addListener(marker, 'click', function() {
           infowindow.open(map,marker);
         });
@@ -227,12 +228,11 @@ function weatherReads() {
   if (routeDist > 50) {
     var numReads = Math.floor(routeDist/50);
     var interval = Math.floor(routeLength/(numReads + 1));
-    for (i=interval; i < routeLength; i+=interval) {
-      readCoords.push(
-        {
-          "lat": routeArray[i].A,
-          "lng": routeArray[i].F,
-        });
+    for (i=interval; i < routeLength && (routeLength - i) > (interval/2); i+=interval) {
+      readCoords.push({
+        "lat": routeArray[i].A,
+        "lng": routeArray[i].F,
+      });
     }
   }
 
@@ -282,6 +282,7 @@ $(document).on('click', '#new-route', function(){
 // program flow:
   // read in start, end, and date from user input
   // calculate the route (polyline)
+  // get start and ent latlng
   // calculate distance (miles)
   // get weather read intervals
     // start and end reads
