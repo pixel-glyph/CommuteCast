@@ -41,7 +41,7 @@ var iconPaths = {
 
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
-  var USA = new google.maps.LatLng(38.2192743, -96.2644229);
+  var USA = new google.maps.LatLng(40.2192743, -96.2644229);
   var mapOptions = {
     zoom:5,
     center: USA

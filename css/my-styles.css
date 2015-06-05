@@ -3,7 +3,6 @@
   height: 100%;
   margin: 0px;
   padding: 0px;
-  background-color: rgb(54, 57, 87); /* (85, 132, 178) */
 }
 
 .navbar {
@@ -17,10 +16,18 @@
   box-shadow: 0px 1px 8px #000;
 }
 
+.navbar-header, .btn-primary, .btn-success {
+  font-family: 'Comfortaa', Arial, monospace;
+}
+
 .main-logo {
   font-size: 2em;
   margin: 10px 0 0;
-  font-family: 'Montserrat', Courier, monospace;
+}
+
+.sub-heading {
+  margin-left: 20px;
+  color: #cbcbcb;
 }
 
 .navbar-toggle {
@@ -29,7 +36,6 @@
 
 #commute-day, #start, #end {
   margin: 4px 0;
-
 }
 
 #map-canvas {
@@ -37,6 +43,16 @@
   width: 100%;
   margin: 0;
 }
+
+/*footer p {
+  position: absolute;
+  bottom: -100px;
+  left: 100px;
+  margin: 0;
+  font-family: 'Comfortaa', Arial, monospace;
+  letter-spacing: 0.1em;
+  color: #000;
+}*/
 
 
 @media screen and (min-width: 768px) {
@@ -51,12 +67,12 @@
   }
 
   .navbar {
-    margin-bottom: 20px;
+    margin-bottom: -122px;
   }
 
   .navbar-form {
     padding-left: 0;
-    margin-top: 35px;
+    margin-top: 60px;
   }
 
   .navbar-collapse {
@@ -67,19 +83,24 @@
     margin: 0;
   }
 
+  #commute-day {
+    width: 100px
+  }
+
   #start, #end {
-    width: 125px;
+    width: 105px;
   }
 
   #get-route, #get-route {
-    margin-left: 20px;
+    margin: 0 0 0 12px;
   }
 
-  #map-canvas {
-    height: 80%;
-    width: 97%;
-    max-width: 1450px;
-    margin: 50px auto 20px;
+}
+
+@media screen and (min-width: 823px) {
+
+  #start, #end {
+    width: 125px;
   }
 
 }
@@ -93,6 +114,10 @@
 
   #start, #end {
     width: auto;
+  }
+
+  #get-route, #get-route {
+    margin: 0 8px 0 20px;
   }
 
 }
