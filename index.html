@@ -41,8 +41,14 @@
                 <option value="6"></option>
                 <option value="7"></option>
               </select>
-              <input type="text" id="start" class="form-control" placeholder="Start">
-              <input type="text" id="end" class="form-control" placeholder="Destination">
+              <span class="start">
+                <input type="text" id="start" class="form-control search" placeholder="Start" />
+                <ul id="start-sugs" class="suggestions"></ul>
+              </span>
+              <span class="destination">
+                <input type="text" id="end" class="form-control search" placeholder="Destination" />
+                <ul id="dest-sugs" class="suggestions"></ul>
+              </span>
             </div>
             <button type="button" id="get-route" class="btn btn-primary" onclick="calcRoute();">Get Route</button>
           </form>
