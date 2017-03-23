@@ -224,6 +224,8 @@ function displayMatches(e) {
           cityName = place.city.replace(regex, `<span class="hl">${e.target.value}</span>`),
           stateName = place.state.replace(regex, `<span class="hl">${e.target.value}</span>`),
           pop = numberWithCommas(place.population);
+  
+    
     
     return `
       <li>
@@ -236,10 +238,37 @@ function displayMatches(e) {
   e.target.nextElementSibling.innerHTML = html;
 }
 
-const searchInput = document.querySelectorAll('.search');
-const suggestions = document.querySelector('.suggestions');
+function isSuggestions(e) {
+  if(document.querySelectorAll('.suggestions > li').length) {
+    let suggestions = document.querySelectorAll('.suggestions');
+    let currentSuggList, currentInputBox;
+    
+    suggestions.forEach(sugg => {
+      if(sugg.hasChildNodes()) {
+        currentSuggList = sugg;
+        currentInputBox = sugg.previousElementSibling;
+        return;
+      }
+    });
+    
+    if(currentSuggList !== e.target && currentSuggList.contains(e.target)) {
+      let currentPlace = e.target.closest('li').querySelector('.name').textContent;
+      currentInputBox.value = currentPlace;
+      removeSuggestions(currentSuggList);
+    } else {
+      removeSuggestions(currentSuggList);
+    }
+  }
+}
 
-searchInput.forEach(input => input.addEventListener('change', displayMatches));
+function removeSuggestions(list) {
+  list.textContent = '';
+}
+
+const searchInput = document.querySelectorAll('.search');
+const suggestions = document.querySelectorAll('.suggestions');
+
+document.addEventListener('click', isSuggestions)
 searchInput.forEach(input => input.addEventListener('keyup', displayMatches));
 
 
