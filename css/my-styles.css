@@ -3,6 +3,7 @@
   height: 100%;
   margin: 0px;
   padding: 0px;
+  overflow: hidden;
 }
 
 .navbar {
@@ -26,7 +27,7 @@
 }
 
 .sub-heading {
-  width: 190px;
+  width: 210px;
   margin-left: 20px;
   color: #cbcbcb;
 }
@@ -62,7 +63,6 @@ input.search {
   padding: 0;
   position: absolute;
   left: 0;
-  overflow: hidden;
 }
 .suggestions li {
   background: white;
@@ -80,6 +80,10 @@ input.search {
 .suggestions li:hover {
   background-color: #ece5e5;
   cursor: pointer;
+}
+
+.suggestions li.selected {
+  background-color: #ece5e5;
 }
 
 .hl {

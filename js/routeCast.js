@@ -213,63 +213,112 @@ function findMatches(wordToMatch, cities) {
   }); 
 }
 
-function numberWithCommas(num) {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
-
 function displayMatches(e) {
-  const matchArray = findMatches(e.target.value, cities);
-  const html = matchArray.map( place => {
-    const regex = new RegExp(e.target.value, 'gi'),
-          cityName = place.city.replace(regex, `<span class="hl">${e.target.value}</span>`),
-          stateName = place.state.replace(regex, `<span class="hl">${e.target.value}</span>`),
-          pop = numberWithCommas(place.population);
-  
-    
-    
-    return `
-      <li>
-        <span class="name">${cityName}, ${stateName}</span>
-        <span class="population">${pop}</span>
-      </li>
-    `;
-  }).join('');
-  
-  e.target.nextElementSibling.innerHTML = html;
-}
-
-function isSuggestions(e) {
-  if(document.querySelectorAll('.suggestions > li').length) {
-    let suggestions = document.querySelectorAll('.suggestions');
-    let currentSuggList, currentInputBox;
-    
-    suggestions.forEach(sugg => {
-      if(sugg.hasChildNodes()) {
-        currentSuggList = sugg;
-        currentInputBox = sugg.previousElementSibling;
-        return;
-      }
-    });
-    
-    if(currentSuggList !== e.target && currentSuggList.contains(e.target)) {
-      let currentPlace = e.target.closest('li').querySelector('.name').textContent;
-      currentInputBox.value = currentPlace;
-      removeSuggestions(currentSuggList);
-    } else {
-      removeSuggestions(currentSuggList);
+  if(e.keyCode === 13 || e.keyCode === 38 || e.keyCode === 40) {
+    listSelect(e);
+  } else {
+    let targetSuggestions = e.target.nextElementSibling;
+    if(/^[a-z\s]+$/i.test(e.key) && e.target.value !== '') {
+      const matchArray = findMatches(e.target.value, cities);
+      const html = matchArray.map( place => {
+        const regex = new RegExp(e.target.value, 'gi'),
+              cityName = place.city.replace(regex, `<span class="hl">${e.target.value}</span>`),
+              stateName = place.state.replace(regex, `<span class="hl">${e.target.value}</span>`);
+        
+        return `
+          <li>
+            <span class="name">${cityName}, ${stateName}</span>
+          </li>
+        `;    
+      }).join('');
+      
+      targetSuggestions.innerHTML = html;
+      
+    } else if(e.key === 'Tab' || e.target.value === '') { 
+      removeSuggestions(targetSuggestions);
     }
   }
 }
 
+function isSuggestions(e) {
+  if(!document.querySelectorAll('.suggestions > li').length) return;
+    
+  const suggestionList = e.target.closest('li').parentNode,
+        input = suggestionList.previousElementSibling;
+  
+  if(suggestionList !== e.target && suggestionList.contains(e.target)) {
+    let currentPlace = e.target.closest('li').querySelector('.name').textContent;
+    input.value = currentPlace;
+    removeSuggestions(suggestionList);
+  } else {
+    removeSuggestions(suggestionList);
+  }
+}
+
+function listSelect(e) {
+  let places = document.querySelectorAll('.suggestions > li');
+  if(!places.length) return;
+  
+  let key = e.keyCode,
+      selected = document.querySelector('li.selected'),
+      current;
+
+  if(selected) {
+    selected.classList.remove('selected');
+  }
+  
+  // down key
+  if(key === 40) {  
+    if(!selected || !selected.nextElementSibling) {
+      current = places[0];
+    } else {
+      current = selected.nextElementSibling;
+    }
+  // up key    
+  } else if(key === 38) {
+    if(!selected || !selected.previousElementSibling) {
+      current = places[places.length - 1];
+    } else {
+      current = selected.previousElementSibling;
+    }
+  // enter key  
+  } else if((key === 13 || key === 9) && selected) {
+    removeSuggestions(selected.parentNode);
+  }
+  
+  if(current) {
+    current.classList.add('selected');
+  }
+  const newSelected = document.querySelector('li.selected');
+  
+  if(newSelected) {
+    const input = newSelected.parentNode.previousElementSibling;
+    const placeName = newSelected.querySelector('.name').textContent;
+    input.value = placeName;
+  }
+}
+
 function removeSuggestions(list) {
-  list.textContent = '';
+  if(list.textContent !== '') {
+    list.textContent = '';
+  }
+}
+
+function clearSuggs(e) {
+  if(e.keyCode !== 9) return;
+  if(document.querySelector('li.selected')) {
+    listSelect(e);
+  }
+  let suggs = document.querySelectorAll('.suggestions');
+  suggs.forEach(sug => sug.textContent = '');
 }
 
 const searchInput = document.querySelectorAll('.search');
 const suggestions = document.querySelectorAll('.suggestions');
 
-document.addEventListener('click', isSuggestions)
+document.addEventListener('click', isSuggestions);
 searchInput.forEach(input => input.addEventListener('keyup', displayMatches));
+searchInput.forEach(input => input.addEventListener('keydown', clearSuggs));
 
 
 
