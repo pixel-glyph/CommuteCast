@@ -13,7 +13,7 @@ var directionsDisplay, map, origin1, destinationA,
 
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
-  var USA = new google.maps.LatLng(40.2192743, -96.2644229),
+  var USA = new google.maps.LatLng(38.0442257, -95.9582357),
       mapOptions = {
         zoom:5,
         center: USA
@@ -241,17 +241,25 @@ function displayMatches(e) {
 }
 
 function isSuggestions(e) {
-  if(!document.querySelectorAll('.suggestions > li').length) return;
-    
-  const suggestionList = e.target.closest('li').parentNode,
-        input = suggestionList.previousElementSibling;
+  if(document.querySelectorAll('.suggestions > li').length) {
+    let suggestions = document.querySelectorAll('.suggestions');
+    let currentSuggList, currentInputBox;
+
+    suggestions.forEach(sugg => {
+     if(sugg.hasChildNodes()) {
+       currentSuggList = sugg;
+       inputBox = sugg.previousElementSibling;
+       return;
+     }
+    });
   
-  if(suggestionList !== e.target && suggestionList.contains(e.target)) {
-    let currentPlace = e.target.closest('li').querySelector('.name').textContent;
-    input.value = currentPlace;
-    removeSuggestions(suggestionList);
-  } else {
-    removeSuggestions(suggestionList);
+    if(currentSuggList !== e.target && currentSuggList.contains(e.target)) {
+      const currentPlace = e.target.closest('li').querySelector('.name').textContent;
+      inputBox.value = currentPlace;
+      removeSuggestions(currentSuggList);
+    } else {
+      removeSuggestions(currentSuggList);
+    }
   }
 }
 
