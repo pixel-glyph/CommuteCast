@@ -26,12 +26,6 @@
   margin: 10px 0 0;
 }
 
-.sub-heading {
-  width: 210px;
-  margin-left: 20px;
-  color: #cbcbcb;
-}
-
 .navbar-toggle {
   margin-top: 13px;
 }
@@ -90,38 +84,35 @@ span.population {
   font-size: 15px;
 }
 
-/*footer p {
-  position: absolute;
-  bottom: -100px;
-  left: 100px;
-  margin: 0;
-  font-family: 'Comfortaa', Arial, monospace;
-  letter-spacing: 0.1em;
-  color: #000;
-}*/
-
-
 @media screen and (min-width: 768px) {
 
   .main-logo {
     margin: 20px 0;
     font-size: 3em;
   }
-
+  
   .navbar-toggle {
     margin-top: 28px;
   }
 
   .navbar {
-    margin-bottom: -122px;
+    margin-bottom: -85px;
+  }
+  
+  .navbar-header {
+    height: 80px;
   }
 
   .navbar-form {
-    padding-left: 0;
-    margin-top: 60px;
+    clear: left;
+    margin: 0 auto;
+    width: 750px;
+    padding-bottom: 12px;
+    
   }
 
   .navbar-collapse {
+    width: 100%;
     padding-right: 0;
   }
 
@@ -134,7 +125,7 @@ span.population {
   }
 
   #start, #end {
-    width: 105px;
+    width: 235px;
   }
 
   #get-route, #get-route {
@@ -143,22 +134,12 @@ span.population {
 
 }
 
-@media screen and (min-width: 823px) {
-
-  #start, #end {
-    width: 125px;
-  }
-
-}
-
-@media screen and (min-width: 1100px) {
-
-  .main-logo {
-    font-size: 3.5em;
-  }
-
-  #start, #end {
-    width: 235px;
+@media screen and (min-width: 1110px) {
+  
+  .navbar-form {
+    width: 750px;
+    padding-top: 25px;
+    clear: none;
   }
 
   #get-route, #get-route {

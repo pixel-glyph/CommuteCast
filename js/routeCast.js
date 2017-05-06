@@ -60,14 +60,21 @@ function callback(response, status) {
 //-------------------- GET ROUTE --------------------
 
 function calcRoute() {
+  var start = document.getElementById('start').value,
+      end = document.getElementById('end').value;
+      
+  if(!start || !end) {
+    alert('Enter a start and destination.');
+    return;
+  }
+  
   var directionsService = new google.maps.DirectionsService(),
-      start = document.getElementById('start').value,
-      end = document.getElementById('end').value,
       request = {
         origin:start,
         destination:end,
         travelMode: google.maps.TravelMode.DRIVING
       };
+      
   // grab start and end lat and lng AND the route's array length, place them in global vars
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
@@ -214,6 +221,7 @@ function findMatches(wordToMatch, cities) {
 }
 
 function displayMatches(e) {
+  if(window.innerWidth < 768) return;
   if(e.keyCode === 13 || e.keyCode === 38 || e.keyCode === 40) {
     listSelect(e);
   } else {
