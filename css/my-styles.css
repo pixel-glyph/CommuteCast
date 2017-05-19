@@ -7,7 +7,7 @@
 }
 
 .navbar {
-  margin-bottom: -62px;
+  margin: 0;
 }
 
 .navbar-inverse {
@@ -95,10 +95,6 @@ span.population {
     margin-top: 28px;
   }
 
-  .navbar {
-    margin-bottom: -85px;
-  }
-  
   .navbar-header {
     height: 80px;
   }
